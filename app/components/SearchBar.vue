@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const githubStore = useGitHubStore();
+const toast = useToast();
 
 const query = ref('');
 const isDropdownVisible = ref(false);
@@ -19,23 +20,37 @@ const resetActiveIndex = () => {
   activeIndex.value = -1;
 };
 
-const handleSearch = () => {
+const handleSearch = async () => {
   isDropdownVisible.value = false;
 
   const sanitizedQuery = query.value.trim();
 
-  if (!sanitizedQuery) {
-    navigateTo({ name: 'index' });
+  if (import.meta.client && !navigator.onLine) {
+    toast.error('You are offline. Check your connection to search.');
 
     return;
   }
 
-  navigateTo({
-    name: 'user-username',
-    params: {
-      username: sanitizedQuery,
-    },
-  });
+  if (!sanitizedQuery) {
+    try {
+      await navigateTo({ name: 'index' });
+    } catch (err) {
+      handleNavigationError(err);
+    }
+
+    return;
+  }
+
+  try {
+    await navigateTo({
+      name: 'user-username',
+      params: {
+        username: sanitizedQuery,
+      },
+    });
+  } catch (err) {
+    handleNavigationError(err);
+  }
 };
 
 const handleRecentSearchItemSelect = (recentSearchQuery: string) => {

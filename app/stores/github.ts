@@ -20,13 +20,7 @@ export const useGitHubStore = defineStore('github', () => {
         if (saved) {
           searchHistory.value = JSON.parse(saved);
         }
-      } catch (error) {
-        // TODO: maybe show in toast?
-        console.error(
-          'Failed to parse search history from local storage',
-          error,
-        );
-
+      } catch {
         searchHistory.value = [];
       }
     }

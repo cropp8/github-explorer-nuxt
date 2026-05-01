@@ -1,8 +1,12 @@
 <script setup lang="ts">
 const githubStore = useGitHubStore();
 
-const quickSearch = (username: string) => {
-  navigateTo({ name: 'user-username', params: { username } });
+const quickSearch = async (username: string) => {
+  try {
+    await navigateTo({ name: 'user-username', params: { username } });
+  } catch (err) {
+    handleNavigationError(err);
+  }
 };
 </script>
 
