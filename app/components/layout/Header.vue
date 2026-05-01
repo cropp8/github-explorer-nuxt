@@ -3,7 +3,7 @@ const colorMode = useColorMode();
 
 const isDarkTheme = computed({
   get: () => colorMode.value === 'dark',
-  
+
   set: (newValue: boolean) => {
     colorMode.preference = newValue ? 'dark' : 'light';
   },
@@ -28,15 +28,26 @@ const isDarkTheme = computed({
           <SearchBar />
         </div>
 
-        <div
-          class="col-span-3 flex justify-end absolute md:static top-full right-0 p-2 md:p-0 md:z-40"
-        >
+        <div class="col-span-3 flex justify-end absolute md:static top-full right-0 p-2 md:p-0 md:z-40">
           <div class="flex gap-2 items-center">
-            <Icon name="lucide:sun" size="20" aria-hidden="true" />
+            <ClientOnly>
+              <Icon
+                name="lucide:sun"
+                size="20"
+                aria-hidden="true"
+              />
 
-            <UiToggleSwitch v-model="isDarkTheme" aria-label="Toggle dark mode" />
+              <UiToggleSwitch
+                v-model="isDarkTheme"
+                aria-label="Toggle dark mode"
+              />
 
-            <Icon name="lucide:moon-star" size="20" aria-hidden="true" />
+              <Icon
+                name="lucide:moon-star"
+                size="20"
+                aria-hidden="true"
+              />
+            </ClientOnly>
           </div>
         </div>
       </div>

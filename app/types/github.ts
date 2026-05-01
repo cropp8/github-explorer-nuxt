@@ -20,3 +20,9 @@ export interface GitHubUser {
   location: string | null;
   html_url: string;
 }
+
+export interface GitHubErrorResponse {
+  message: string;
+  documentation_url?: string;
+  status?: string;
+}

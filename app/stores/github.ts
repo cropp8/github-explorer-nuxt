@@ -1,4 +1,5 @@
-import type { GitHubRepo, GitHubUser } from '@/types/github';
+import type { FetchError } from 'ofetch';
+import type { GitHubRepo, GitHubUser, GitHubErrorResponse } from '@/types/github';
 
 export const useGitHubStore = defineStore('github', () => {
   const user = ref<GitHubUser | null>(null);
@@ -20,6 +21,7 @@ export const useGitHubStore = defineStore('github', () => {
           searchHistory.value = JSON.parse(saved);
         }
       } catch (error) {
+        // TODO: maybe show in toast?
         console.error(
           'Failed to parse search history from local storage',
           error,
@@ -81,10 +83,12 @@ export const useGitHubStore = defineStore('github', () => {
     }
   }
 
-  function handleApiError(err: any, defaultMsg: string) {
-    if (err?.response) {
-      const status = err.response.status;
-      const errorData = err.data;
+  function handleApiError(err: unknown, defaultMsg: string) {
+    const fetchErr = err as FetchError<GitHubErrorResponse>;
+
+    if (fetchErr?.response) {
+      const status = fetchErr.response.status;
+      const errorData = fetchErr.data;
 
       if (status === 404) {
         toast.error('GitHub user not found.');
@@ -94,12 +98,11 @@ export const useGitHubStore = defineStore('github', () => {
         toast.error(errorData?.message || defaultMsg);
       }
 
-      error.value = errorData?.message || err.message;
-
+      error.value = errorData?.message || fetchErr.message;
     } else if (
-      // @TODO: check
-      err?.message === 'fetch failed' ||
-      err?.message?.includes('Network')
+      fetchErr?.message?.includes('Failed to fetch')
+      || fetchErr?.message?.includes('<no response>')
+      || fetchErr?.message?.includes('Network')
     ) {
       toast.error('Network error. Check your connection.');
       error.value = 'Network error';

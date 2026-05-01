@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const modelValue = defineModel<boolean>();
-
-// @TODO: hydration mismatch here
 </script>
 
 <template>

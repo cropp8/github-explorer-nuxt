@@ -10,7 +10,32 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/color-mode',
   ],
+  imports: {
+    dirs: ['constants'],
+  },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      ]
+    }
+  },
   devtools: { enabled: true },
+  css: ['~/assets/css/main.css'],
+  colorMode: {
+    preference: 'system',
+    fallback: 'light',
+    classSuffix: '',
+  },
+  runtimeConfig: {
+    public: {
+      githubApiBaseUrl: process.env.GH_API_BASE_URL || 'https://api.github.com',
+      githubToken: process.env.GH_API_TOKEN || '',
+    },
+  },
+  routeRules: {
+    '/user': { redirect: '/' },
+  },
   compatibilityDate: '2025-07-15',
   vite: {
     optimizeDeps: {
@@ -27,24 +52,6 @@ export default defineNuxtConfig({
     config: {
       stylistic: true,
     },
-  },
-  css: ['~/assets/css/main.css'],
-  imports: {
-    dirs: ['constants'],
-  },
-  routeRules: {
-    '/user': { redirect: '/' }
-  },
-  runtimeConfig: {
-    public: {
-      githubApiBaseUrl: process.env.GH_API_BASE_URL || 'https://api.github.com',
-      githubToken: process.env.GH_API_TOKEN || ''
-    },
-  },
-  colorMode: {
-    preference: 'system',
-    fallback: 'light',
-    classSuffix: '',
   },
   pinia: {
     storesDirs: ['stores'],

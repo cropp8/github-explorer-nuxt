@@ -105,8 +105,15 @@ watch(
 </script>
 
 <template>
-  <form role="search" @submit.prevent="handleSearch" class="flex gap-2">
-    <label for="github-search" class="sr-only"> Search GitHub username </label>
+  <form
+    role="search"
+    class="flex gap-2"
+    @submit.prevent="handleSearch"
+  >
+    <label
+      for="github-search"
+      class="sr-only"
+    > Search GitHub username </label>
 
     <div class="relative grow flex">
       <input
@@ -125,7 +132,7 @@ watch(
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKeyDown"
-      />
+      >
 
       <Transition v-bind="fadeTransition">
         <div
@@ -141,16 +148,21 @@ watch(
           <ul role="listbox">
             <li
               v-for="(item, index) in githubStore.searchHistory"
+              :id="`recent-search-option-${index}`"
               :key="item"
               class="group"
-              :id="`recent-search-option-${index}`"
             >
               <button
                 class="w-full flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-left transition-colors text-gray-700 dark:text-gray-300 cursor-pointer"
                 :class="{ 'bg-gray-100 dark:bg-gray-800': index === activeIndex }"
                 @mousedown="handleRecentSearchItemSelect(item)"
               >
-                <Icon name="lucide:history" size="16" class="text-gray-400" aria-hidden="true" />
+                <Icon
+                  name="lucide:history"
+                  size="16"
+                  class="text-gray-400"
+                  aria-hidden="true"
+                />
 
                 <span class="flex-1">{{ item }}</span>
 
@@ -169,9 +181,14 @@ watch(
 
     <button
       type="submit"
-      class="rounded-lg bg-violet-500 text-white flex gap-1 items-center py-1 px-4 md:px-2 cursor-pointer hover:bg-violet-600 transition-colors active:bg-violet-700 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+      class="rounded-lg bg-violet-600 text-white flex gap-1 items-center py-1 px-4 md:px-2 cursor-pointer hover:bg-violet-700 transition-colors active:bg-violet-800 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
     >
-      <Icon name="lucide:search" size="14" stroke-width="3.5" aria-hidden="true" />
+      <Icon
+        name="lucide:search"
+        size="14"
+        stroke-width="3.5"
+        aria-hidden="true"
+      />
 
       <span class="sr-only md:not-sr-only">search</span>
     </button>
